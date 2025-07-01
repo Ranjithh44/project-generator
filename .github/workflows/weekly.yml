@@ -1,1 +1,9 @@
+name: Weekly Project Generator
 
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 6 * * 1'  # every Monday at 6 AM UTC
+  workflow_dispatch:
