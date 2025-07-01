@@ -1,0 +1,32 @@
+name: Weekly Project Generator
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 6 AM UTC
+  workflow_dispatch:     # Allows manual triggering
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install GitHub CLI
+        run: sudo apt install gh -y
+
+      - name: Authenticate GitHub CLI
+        run: echo "$GH_TOKEN" | gh auth login --with-token
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Run project generator
+        run: python generate_project.py
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
